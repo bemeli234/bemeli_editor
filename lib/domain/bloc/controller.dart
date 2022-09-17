@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
@@ -484,6 +485,9 @@ class VideoEditorController extends ChangeNotifier {
         " -i \'$videoPath\' ${customInstruction ?? ""} $filter ${_getPreset(preset)} $trim -y $outputPath";
 
     // PROGRESS CALLBACKS
+
+    log("execute---->$execute");
+
     await FFmpegKit.executeAsync(
       execute,
       (session) async {
