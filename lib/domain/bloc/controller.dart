@@ -482,7 +482,7 @@ class VideoEditorController extends ChangeNotifier {
         : "";
     final String execute =
         // ignore: unnecessary_string_escapes
-        " -i \'$videoPath\' ${customInstruction ?? ""} $filter ${_getPreset(preset)} $trim -y $outputPath";
+        " -i \'$videoPath\' ${customInstruction ?? ""} $filter ${_getPreset(preset)} $trim -qp 0 $outputPath";
 
     // PROGRESS CALLBACKS
 

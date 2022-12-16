@@ -36,8 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   bemeli_editor:
     path: ../    
-  helpers: ^1.1.4
+  helpers: 
   image_picker: ^0.8.5+3
+  video_player: ^2.2.9
 
 dev_dependencies:
   flutter_test:

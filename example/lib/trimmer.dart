@@ -1,7 +1,9 @@
+ 
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:bemeli_editor/bemeli_editor.dart';
+import 'package:example/preview.dart';
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
@@ -37,7 +39,7 @@ class _TrimmerViewState extends State<TrimmerView> {
             background: Colors.white.withOpacity(0.5),
             circleSize: 10),
         maxDuration: Duration(seconds: 30))
-      ..initialize().then((_) => setState(() {}));
+      ..initialize().then((_) => setState(() { log('size-->${_controller.videoDimension}');}));
 
     _controller.generateDefaultCoverThumbnail();
 
@@ -69,15 +71,18 @@ class _TrimmerViewState extends State<TrimmerView> {
     //NOTE: To use [-crf 17] and [VideoExportPreset] you need ["min-gpl-lts"] package
     await _controller.exportVideo(
       preset: VideoExportPreset.veryfast,
-      customInstruction: "-crf 28",
+     
       onProgress: (stats, value) => _exportingProgress.value = value,
       onCompleted: (file) {
         _isExporting.value = false;
-        _endController = VideoEditorController.file(file);
-        _endController.getMetaData(
-            onCompleted: ((metadata) => print("meta_detail->$metadata")));
 
         _exportText = "Video success export!";
+
+        if (!mounted) null;
+
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => Preview(file: file),
+        ));
 
         setState(() {
           _progressVisibility = false;
@@ -281,11 +286,10 @@ class _TrimmerViewState extends State<TrimmerView> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextDesigned(formatter(Duration(seconds: start.toInt()))),
+                    Text(formatter(Duration(seconds: start.toInt()))),
                     if (_controller.isPlaying)
-                      TextDesigned(formatter(Duration(seconds: diff.ceil()))),
-                    TextDesigned(
-                        formatter(Duration(seconds: duration.toInt()))),
+                      Text(formatter(Duration(seconds: diff.ceil()))),
+                    Text(formatter(Duration(seconds: duration.toInt()))),
                   ]));
         },
       ),
@@ -316,9 +320,8 @@ class _TrimmerViewState extends State<TrimmerView> {
           width: double.infinity,
           color: Colors.black.withOpacity(0.8),
           child: Center(
-            child: TextDesigned(
+            child: Text(
               _exportText,
-              bold: true,
             ),
           ),
         ),
@@ -401,7 +404,9 @@ class CropScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.aspect_ratio, color: Colors.white),
-            TextDesigned(title, bold: true),
+            Text(
+              title,
+            ),
           ],
         ),
       ),
